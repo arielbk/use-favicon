@@ -1,6 +1,6 @@
 {
   "name": "use-favicon",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A React hook to add dynamic favicons to your application",
   "main": "dist/index.js",
   "author": "arielbk",
