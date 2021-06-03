@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import useIsAway from "./hooks/useIsAway";
 import useIsDarkMode from "./hooks/useIsDarkMode";
 import getFavicon from "./utils/getFavicon";
+import randomEmoji from "./utils/randomEmoji";
 
 export type FaviconFns = {
   triggerNotification: () => void;
@@ -15,16 +16,20 @@ type IconVariants = {
   away?: string;
 };
 
+type FaviconTypes = "icon" | "emoji" | "colors";
+
 type UseFaviconOptions = {
-  faviconType?: "icon" | "emoji" | "color";
+  faviconType?: FaviconTypes;
   emoji?: string | IconVariants;
   icon?: string | IconVariants;
+  colors?: string[];
 };
 
 const useFaviconOptions = ({
   faviconType = "emoji",
-  emoji = "😊",
+  emoji = randomEmoji(),
   icon,
+  colors,
 }: UseFaviconOptions): FaviconFns => {
   const [type, setType] = useState(faviconType);
   const [isNotification, setIsNotification] = useState(false);
@@ -38,6 +43,8 @@ const useFaviconOptions = ({
   const isDarkMode = useIsDarkMode();
 
   useEffect(() => {
+    // todo: abstract these three selections
+
     // determine selected emoji
     if (typeof emoji !== "object") return;
     let emojiVariant = "default";
@@ -71,13 +78,32 @@ const useFaviconOptions = ({
         </svg>`
       );
     }
+    if (type === "colors") {
+      const offset = Math.floor(100 / colors!.length);
+      favicon.setAttribute(
+        "href",
+        `data:image/svg+xml,
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+          ${colors?.map(
+            (color, i) => `
+            <rect x="${
+              offset * i
+            }" y="0" height="100" width="${offset}" fill="${color.replace(
+              "#",
+              "%23"
+            )}" />
+          `
+          )}
+        </svg>`
+      );
+    }
   }, [selectedEmoji, isNotification]);
 
   return {
     triggerNotification: useCallback(() => setIsNotification(true), []),
     clearNotification: useCallback(() => setIsNotification(false), []),
     selectFaviconType: useCallback(
-      (newType: "emoji" | "icon" | "color") => setType(newType),
+      (newType: FaviconTypes) => setType(newType),
       []
     ),
   };
