@@ -9,6 +9,7 @@
     "favicon",
     "hook"
   ],
+  "homepage": "https://github.com/arielbk/use-favicon",
   "license": "MIT",
   "scripts": {
     "build": "rollup -c",
