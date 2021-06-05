@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 const useIsDarkMode = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -7,7 +7,7 @@ const useIsDarkMode = () => {
     // set initial dark mode
     if (
       window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
+      window.matchMedia('(prefers-color-scheme: dark)').matches
     ) {
       setIsDarkMode(true);
     }
@@ -17,12 +17,12 @@ const useIsDarkMode = () => {
       setIsDarkMode(event?.matches);
     };
     window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", setIsDarkModeListener);
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', setIsDarkModeListener);
     return () =>
       window
-        .matchMedia("(prefers-color-scheme: dark)")
-        .removeEventListener("change", setIsDarkModeListener);
+        .matchMedia('(prefers-color-scheme: dark)')
+        .removeEventListener('change', setIsDarkModeListener);
   }, []);
 
   return isDarkMode;
