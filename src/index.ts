@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import useIsAway from './hooks/useIsAway';
 import useIsDarkMode from './hooks/useIsDarkMode';
-import getFavicon from './utils/getFavicon';
+import getFaviconLink from './utils/getFaviconLink';
+import getFaviconVariant from './utils/getFaviconVariant';
 import randomEmoji from './utils/randomEmoji';
 
 export type FaviconFns = {
@@ -10,7 +11,7 @@ export type FaviconFns = {
   selectFaviconType: (type: string) => void;
 };
 
-type IconVariants = {
+export type IconVariants = {
   default: string;
   dark?: string;
   away?: string;
@@ -43,25 +44,14 @@ const useFaviconOptions = ({
   const isDarkMode = useIsDarkMode();
 
   useEffect(() => {
-    // todo: abstract these three selections
-
     // determine selected emoji
-    if (typeof emoji !== 'object') return;
-    let emojiVariant = 'default';
-    if (isDarkMode && emoji.dark) emojiVariant = 'dark';
-    if (isAway && emoji.away) emojiVariant = 'away';
-    setSelectedEmoji(emoji[emojiVariant]);
-
+    setSelectedEmoji(getFaviconVariant(emoji, isAway, isDarkMode));
     // determine selected icon
-    if (typeof icon !== 'object') return;
-    let iconVariant = 'default';
-    if (isDarkMode && icon.dark) iconVariant = 'dark';
-    if (isAway && icon.away) iconVariant = 'away';
-    setSelectedIcon(emoji[iconVariant]);
+    if (icon) setSelectedIcon(getFaviconVariant(icon, isAway, isDarkMode));
   }, [isDarkMode, isAway]);
 
   useEffect(() => {
-    const favicon = getFavicon();
+    const favicon = getFaviconLink();
     if (!favicon) return;
     if (type === 'icon' && selectedIcon)
       favicon.setAttribute('href', selectedIcon);
