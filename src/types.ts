@@ -10,7 +10,7 @@ export type IconVariants = {
   away?: string;
 };
 
-export type FaviconTypes = 'icon' | 'emoji' | 'colors';
+export type FaviconTypes = 'icon' | 'emoji' | 'colors' | 'gradient';
 
 export type UseFaviconOptions = {
   faviconType?: FaviconTypes;

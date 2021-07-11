@@ -41,15 +41,49 @@ const useFaviconOptions = ({
     if (type === 'emoji') {
       svgBody = `<style> circle { fill: red; } </style>
       <text y=".9em" font-size="90">${selectedEmoji}</text>
-      ${isNotification ? '<circle cx="80" cy="20" r="20" />' : ''}`
+      ${isNotification ? '<circle cx="80" cy="20" r="20" />' : ''}`;
     }
     // for colors
     if (type === 'colors' && colors) {
       const offset = Math.floor(100 / colors!.length);
-      if (colors) svgBody = colors.map((color, i) => `<rect x="${offset * i}" y="0" height="100" width="${offset}" fill="${color.replace('#','%23',)}" />`).join();
+      if (colors)
+        svgBody = colors
+          .map(
+            (color, i) =>
+              `<rect x="${
+                offset * i
+              }" y="0" height="100" width="${offset}" fill="${color.replace(
+                /\#/g,
+                '%23',
+              )}" />`,
+          )
+          .join();
+    }
+    // for gradients
+    if (type === 'gradient' && colors) {
+      const offset = Math.floor(100 / (colors!.length - 1));
+      if (colors)
+        svgBody = `<defs>
+      <linearGradient id="gradient">
+        ${colors
+          .map(
+            (color, i) =>
+              `<stop offset="${offset * i}%" stop-color="${color}" />`,
+          )
+          .join()}
+      </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="100" height="100" fill="url(#gradient)" />
+      `
+          .replace(/\%/g, '%25')
+          .replace(/\#/g, '%23');
     }
     // set icon through svg
-    if (svgBody) favicon.setAttribute('href', `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">${svgBody}</svg>`);
+    if (svgBody)
+      favicon.setAttribute(
+        'href',
+        `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">${svgBody}</svg>`,
+      );
   }, [selectedEmoji, isNotification]);
 
   return {

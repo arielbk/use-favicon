@@ -1,4 +1,4 @@
-import { IconVariants } from '..';
+import { IconVariants } from '../types';
 
 export default function getFaviconVariant(
   favicon: string | IconVariants,
