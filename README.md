@@ -4,7 +4,7 @@ A React hook to update the favicon of your app. This can be useful to quickly ad
 
 ## **Features**
 
-- Favicon can be either a regular image icon, an emoji, or a color palette
+- Favicon can be either a regular image icon, an emoji, a color palette, or a gradient
 - Favicon can change based on tab focus or dark mode
 - A notification badge can be triggered on the icon
 
@@ -15,7 +15,7 @@ npm install use-favicon
 ```
 
 ```jsx
-import useFavicon from "use-favicon";
+import useFavicon from 'use-favicon';
 
 // in your functional React component
 useFavicon({});
@@ -26,7 +26,7 @@ useFavicon({});
 ## Example
 
 ```jsx
-import useFavicon from "use-favicon";
+import useFavicon from 'use-favicon';
 
 export default function App() {
   useFavicon({
@@ -49,7 +49,7 @@ type UseFaviconOptions = {
   colors?: string[],
 };
 
-type FaviconTypes = "icon" | "emoji" | "colors";
+type FaviconTypes = 'icon' | 'emoji' | 'colors' | 'gradient';
 
 type IconVariants = {
   default: string,
