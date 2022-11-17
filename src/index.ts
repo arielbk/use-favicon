@@ -1,17 +1,34 @@
 import { useCallback, useEffect, useState } from 'react';
 import useIsAway from './hooks/useIsAway';
 import useIsDarkMode from './hooks/useIsDarkMode';
-import { FaviconFns, FaviconTypes, UseFaviconOptions } from './types';
+import {
+  ColorOptions,
+  EmojiOptions,
+  FaviconFns,
+  FaviconOptions,
+  FaviconType,
+  IconOptions,
+} from './types';
 import getFaviconLink from './utils/getFaviconLink';
 import getFaviconVariant from './utils/getFaviconVariant';
 import randomEmoji from './utils/randomEmoji';
 
-const useFaviconOptions = ({
-  faviconType = 'emoji',
-  emoji = randomEmoji(),
-  icon,
-  colors,
-}: UseFaviconOptions): FaviconFns => {
+function useFaviconOptions(
+  faviconType: 'icon',
+  options: IconOptions,
+): FaviconFns;
+function useFaviconOptions(
+  faviconType?: 'emoji',
+  options?: EmojiOptions,
+): FaviconFns;
+function useFaviconOptions(
+  faviconType: 'colors' | 'gradient',
+  options: ColorOptions,
+): FaviconFns;
+function useFaviconOptions(
+  faviconType: FaviconType = 'emoji',
+  { emoji, icon, colors }: FaviconOptions = { emoji: randomEmoji() },
+): FaviconFns {
   const [type, setType] = useState(faviconType);
   const [isNotification, setIsNotification] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState(
@@ -25,7 +42,7 @@ const useFaviconOptions = ({
 
   useEffect(() => {
     // determine selected emoji
-    setSelectedEmoji(getFaviconVariant(emoji, isAway, isDarkMode));
+    if (emoji) setSelectedEmoji(getFaviconVariant(emoji, isAway, isDarkMode));
     // determine selected icon
     if (icon) setSelectedIcon(getFaviconVariant(icon, isAway, isDarkMode));
   }, [isDarkMode, isAway]);
@@ -90,10 +107,10 @@ const useFaviconOptions = ({
     triggerNotification: useCallback(() => setIsNotification(true), []),
     clearNotification: useCallback(() => setIsNotification(false), []),
     selectFaviconType: useCallback(
-      (newType: FaviconTypes) => setType(newType),
+      (newType: FaviconType) => setType(newType),
       [],
     ),
   };
-};
+}
 
 export default useFaviconOptions;

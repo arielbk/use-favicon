@@ -10,11 +10,22 @@ export type IconVariants = {
   away?: string;
 };
 
-export type FaviconTypes = 'icon' | 'emoji' | 'colors' | 'gradient';
+export type FaviconType = 'icon' | 'emoji' | 'colors' | 'gradient';
 
-export type UseFaviconOptions = {
-  faviconType?: FaviconTypes;
+export type FaviconOptions = {
   emoji?: string | IconVariants;
   icon?: string | IconVariants;
   colors?: string[];
+};
+
+export type IconOptions = FaviconOptions & {
+  icon: string | IconVariants;
+};
+
+export type EmojiOptions = FaviconOptions & {
+  emoji: string | IconVariants;
+};
+
+export type ColorOptions = FaviconOptions & {
+  colors: string[];
 };
