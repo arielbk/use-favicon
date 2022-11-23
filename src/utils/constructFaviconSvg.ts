@@ -1,33 +1,38 @@
-import { FaviconType } from '../types';
+import { FaviconNotificationOptions, FaviconType } from '../types';
 
 function constructFaviconSvg(
   type: 'icon' | 'emoji',
   value: string,
   isNotification: boolean,
+  notificationOptions?: FaviconNotificationOptions,
 ): string;
 function constructFaviconSvg(
   type: 'colors' | 'gradient',
   value: string | string[],
   isNotification: boolean,
+  notificationOptions?: FaviconNotificationOptions,
 ): string;
 function constructFaviconSvg(
   type: FaviconType,
   value: string | string[],
   isNotification: boolean,
+  notificationOptions?: FaviconNotificationOptions,
 ): string;
 function constructFaviconSvg(
   type: FaviconType,
   value: string | string[],
   isNotification: boolean,
+  notificationOptions: FaviconNotificationOptions = {
+    position: 'bottom right',
+    color: '#ff0000',
+  },
 ): string {
-  // initialise svg string
+  // initialise svg string with notification color
   let svgBody = '';
 
   // for emoji
   if (type === 'emoji') {
-    svgBody = `<style> circle { fill: red; } </style>
-    <text y=".9em" font-size="90">${value}</text>
-    ${isNotification ? '<circle cx="80" cy="20" r="20" />' : ''}`;
+    svgBody += `<text y=".9em" font-size="90">${value}</text>`;
   }
 
   // for colors
@@ -63,6 +68,17 @@ function constructFaviconSvg(
     `
       .replace(/\%/g, '%25')
       .replace(/\#/g, '%23');
+  }
+
+  // add notification
+  if (isNotification) {
+    const [yKey, xKey] = notificationOptions.position.split(' ');
+    const positionY = yKey === 'top' ? 20 : yKey === 'bottom' ? 80 : 40;
+    const positionX = xKey === 'left' ? 20 : xKey === 'right' ? 80 : 40;
+    svgBody += `<circle cx="${positionX}" cy="${positionY}" r="20" style="fill: ${notificationOptions.color.replace(
+      /\#/g,
+      '%23',
+    )}"/>`;
   }
 
   return svgBody;

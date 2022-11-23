@@ -35,7 +35,12 @@ function useFavicon(
     if (type === 'icon') favicon.setAttribute('href', props.value as string);
 
     // set icon through svg
-    const svg = constructFaviconSvg(type, value, isNotification);
+    const svg = constructFaviconSvg(
+      type,
+      value,
+      isNotification,
+      props.notification,
+    );
     if (svg)
       favicon.setAttribute(
         'href',
