@@ -1,88 +1,70 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useIsAway from './hooks/useIsAway';
 import useIsDarkMode from './hooks/useIsDarkMode';
-import {
-  ColorOptions,
-  EmojiOptions,
-  FaviconFns,
-  FaviconOptions,
-  FaviconType,
-  IconOptions,
-} from './types';
+import { FaviconFns, FaviconOptions } from './types';
 import getFaviconLink from './utils/getFaviconLink';
-import getFaviconVariant from './utils/getFaviconVariant';
 import randomEmoji from './utils/randomEmoji';
 
-function useFaviconOptions(
-  faviconType: 'icon',
-  options: IconOptions,
-): FaviconFns;
-function useFaviconOptions(
-  faviconType?: 'emoji',
-  options?: EmojiOptions,
-): FaviconFns;
-function useFaviconOptions(
-  faviconType: 'colors' | 'gradient',
-  options: ColorOptions,
-): FaviconFns;
-function useFaviconOptions(
-  faviconType: FaviconType = 'emoji',
-  { emoji, icon, colors }: FaviconOptions = { emoji: randomEmoji() },
+function useFavicon(
+  props: FaviconOptions = { type: 'icon', value: randomEmoji() },
 ): FaviconFns {
-  const [type, setType] = useState(faviconType);
+  const [type, setType] = useState(props.type);
+  const [value, setValue] = useState(props.value);
   const [isNotification, setIsNotification] = useState(false);
-  const [selectedEmoji, setSelectedEmoji] = useState(
-    typeof emoji === 'object' ? emoji.default : emoji,
-  );
-  const [selectedIcon, setSelectedIcon] = useState(
-    typeof icon === 'object' ? icon.default : icon,
-  );
+
   const isAway = useIsAway();
   const isDarkMode = useIsDarkMode();
 
+  // determine favicon variant
   useEffect(() => {
-    // determine selected emoji
-    if (emoji) setSelectedEmoji(getFaviconVariant(emoji, isAway, isDarkMode));
-    // determine selected icon
-    if (icon) setSelectedIcon(getFaviconVariant(icon, isAway, isDarkMode));
-  }, [isDarkMode, isAway]);
+    if (isDarkMode && props.darkVariant) {
+      setType(props.darkVariant.type);
+      setValue(props.darkVariant.value);
+    }
+    if (isAway && props.awayVariant) {
+      setType(props.awayVariant.type);
+      setValue(props.awayVariant.value);
+    }
+  }, [isAway, isDarkMode]);
 
   useEffect(() => {
     const favicon = getFaviconLink();
-    if (!favicon) return;
+
     // just set the icon directly
-    if (type === 'icon' && selectedIcon)
-      favicon.setAttribute('href', selectedIcon);
+    if (type === 'icon') favicon.setAttribute('href', props.value as string);
+
+    // initialise svg string
     let svgBody = '';
+
     // for emoji
     if (type === 'emoji') {
       svgBody = `<style> circle { fill: red; } </style>
-      <text y=".9em" font-size="90">${selectedEmoji}</text>
+      <text y=".9em" font-size="90">${value}</text>
       ${isNotification ? '<circle cx="80" cy="20" r="20" />' : ''}`;
     }
+
     // for colors
-    if (type === 'colors' && colors) {
-      const offset = Math.floor(100 / colors!.length);
-      if (colors)
-        svgBody = colors
-          .map(
-            (color, i) =>
-              `<rect x="${
-                offset * i
-              }" y="0" height="100" width="${offset}" fill="${color.replace(
-                /\#/g,
-                '%23',
-              )}" />`,
-          )
-          .join();
+    if (type === 'colors') {
+      const colorArray = typeof value === 'object' ? value : [value];
+      const offset = Math.floor(100 / colorArray.length);
+      svgBody = colorArray
+        .map(
+          (color, i) =>
+            `<rect x="${
+              offset * i
+            }" y="0" height="100" width="${offset}" fill="${color.replace(
+              /\#/g,
+              '%23',
+            )}" />`,
+        )
+        .join();
     }
     // for gradients
-    if (type === 'gradient' && colors) {
-      const offset = Math.floor(100 / (colors!.length - 1));
-      if (colors)
-        svgBody = `<defs>
+    if (type === 'gradient') {
+      const offset = Math.floor(100 / (value.length - 1));
+      svgBody = `<defs>
       <linearGradient id="gradient">
-        ${colors
+        ${(value as string[])
           .map(
             (color, i) =>
               `<stop offset="${offset * i}%" stop-color="${color}" />`,
@@ -92,8 +74,8 @@ function useFaviconOptions(
       </defs>
       <rect x="0" y="0" width="100" height="100" fill="url(#gradient)" />
       `
-          .replace(/\%/g, '%25')
-          .replace(/\#/g, '%23');
+        .replace(/\%/g, '%25')
+        .replace(/\#/g, '%23');
     }
     // set icon through svg
     if (svgBody)
@@ -101,16 +83,17 @@ function useFaviconOptions(
         'href',
         `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">${svgBody}</svg>`,
       );
-  }, [selectedEmoji, isNotification]);
+  }, [type, value, isNotification]);
 
   return {
-    triggerNotification: useCallback(() => setIsNotification(true), []),
-    clearNotification: useCallback(() => setIsNotification(false), []),
-    selectFaviconType: useCallback(
-      (newType: FaviconType) => setType(newType),
-      [],
-    ),
+    setFaviconNotification: (newIsNotification?: boolean) => {
+      if (newIsNotification !== undefined) {
+        setIsNotification(newIsNotification);
+      } else {
+        setIsNotification((prev) => !prev);
+      }
+    },
   };
 }
 
-export default useFaviconOptions;
+export default useFavicon;

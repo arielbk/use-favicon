@@ -16,6 +16,8 @@ const getFavicon = () => {
   return null;
 };
 
+const encodeColorValue = (value: string) => value.replace('#', '%23');
+
 // window.matchMedia mock
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -35,6 +37,8 @@ describe('dom sanity check', () => {
     expect(favicon).toBeFalsy();
   });
 });
+
+// TODO: add favicon image test
 
 describe('random emoji', () => {
   beforeEach(() => render(<FaviconComponent />));
@@ -58,7 +62,7 @@ describe('specific emoji', () => {
     render(<FaviconComponent options={{ type: 'emoji', value: '🙂' }} />);
     const favicon = getFavicon();
     const href = favicon?.getAttribute('href');
-    expect(href).toContain('🫠');
+    expect(href).toContain('🙂');
   });
   it('has the specified emoji favicon: 🫠', async () => {
     render(<FaviconComponent options={{ type: 'emoji', value: '🫠' }} />);
@@ -73,45 +77,45 @@ describe('specific emoji', () => {
 describe('sets color favicon', () => {
   it('sets favicon color', () => {
     const color = '#ff0000';
-    render(<FaviconComponent options={{ type: 'color', value: color }} />);
+    render(<FaviconComponent options={{ type: 'colors', value: color }} />);
     const favicon = getFavicon();
     const href = favicon?.getAttribute('href');
-    expect(href).toContain(color);
+    expect(href).toContain(encodeColorValue(color));
   });
   it('sets multiple favicon colors', () => {
     const colors = ['#ff0000', '#ff00ff'];
-    render(<FaviconComponent options={{ type: 'color', value: colors }} />);
+    render(<FaviconComponent options={{ type: 'colors', value: colors }} />);
     const favicon = getFavicon();
     const href = favicon?.getAttribute('href');
-    expect(href).toContain(colors[0]);
-    expect(href).toContain(colors[1]);
+    expect(href).toContain(encodeColorValue(colors[0]));
+    expect(href).toContain(encodeColorValue(colors[1]));
   });
 });
 
 describe('sets color gradient', () => {
   it('sets 2-color gradient', () => {
     const colors = ['#ff0000', '#ff00ff'];
-    render(<FaviconComponent options={{ type: 'color', value: colors }} />);
+    render(<FaviconComponent options={{ type: 'gradient', value: colors }} />);
     const favicon = getFavicon();
     const href = favicon?.getAttribute('href');
-    expect(href).toContain(colors[0]);
-    expect(href).toContain(colors[1]);
+    expect(href).toContain(encodeColorValue(colors[0]));
+    expect(href).toContain(encodeColorValue(colors[1]));
   });
   it('sets 3-color gradient', () => {
     const colors = ['#ff0000', '#ff00ff', '#00ff00'];
-    render(<FaviconComponent options={{ type: 'color', value: colors }} />);
+    render(<FaviconComponent options={{ type: 'gradient', value: colors }} />);
     const favicon = getFavicon();
     const href = favicon?.getAttribute('href');
-    expect(href).toContain(colors[0]);
-    expect(href).toContain(colors[1]);
-    expect(href).toContain(colors[2]);
+    expect(href).toContain(encodeColorValue(colors[0]));
+    expect(href).toContain(encodeColorValue(colors[1]));
+    expect(href).toContain(encodeColorValue(colors[2]));
   });
 });
 
 // TODO: test if it sets an away variant
 
 describe('dark variant', () => {
-  const options = {
+  const options: FaviconOptions = {
     type: 'emoji',
     value: '😎',
     darkVariant: {
@@ -132,7 +136,7 @@ describe('dark variant', () => {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: jest.fn().mockImplementation((query) => ({
-        matches: false,
+        matches: true,
         media: query,
         onchange: null,
         addEventListener: jest.fn(),
@@ -143,6 +147,6 @@ describe('dark variant', () => {
     render(<FaviconComponent options={options} />);
     const favicon = getFavicon();
     const href = favicon?.getAttribute('href');
-    expect(href).toContain(options.darkVariant.value);
+    expect(href).toContain(options!.darkVariant!.value);
   });
 });
