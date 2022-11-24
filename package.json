@@ -14,8 +14,10 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:ci": "jest --ci",
     "build": "tsup src",
-    "dev": "tsup src --watch"
+    "dev": "tsup src --watch",
+    "release": "release-it"
   },
   "devDependencies": {
     "@testing-library/react": "^13.4.0",
@@ -26,6 +28,7 @@
     "jest-environment-jsdom": "^29.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "release-it": "^15.5.0",
     "ts-jest": "^29.0.3",
     "tsup": "^6.5.0",
     "typescript": "^4.9.3"
