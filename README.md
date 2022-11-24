@@ -1,76 +1,114 @@
 # **use-favicon**
 
-A React hook to update the favicon of your app. This can be useful to quickly add a favicon to a side project, or to dynamically change the icon based on certain app states.
+A React hook to update the favicon of your app. Useful to quickly add a favicon to a side project, or to dynamically change the favicon based on the state of your application.
 
-## **Features**
+This library makes use of SVG icons, which are now supported in most modern browsers (check out the [caniuse page](https://caniuse.com/?search=svg%20favicon)).
+
+## Features
 
 - Favicon can be either a regular image icon, an emoji, a color palette, or a gradient
-- Favicon can change based on tab focus or dark mode
+- Dynamic favicon based on tab focus
+- Dynamic favicon based on light or dark mode
 - A notification badge can be triggered on the icon
 
-## **Getting started**
+## Getting started
 
 ```jsx
 npm install use-favicon
 ```
 
-```jsx
+```tsx
 import useFavicon from 'use-favicon';
 
 // in your functional React component
-useFavicon({});
+useFavicon();
 
-// 👆 with default options, this will set your favicon to a random emoji
+// 👆 without a config object this will set your favicon to a random emoji
 ```
 
-## Example
+## Examples
 
-```jsx
+### Emoji
+
+```tsx
 import useFavicon from 'use-favicon';
 
 export default function App() {
   useFavicon({
-    // options here
+    type: 'emoji',
+    value: '👾',
   });
 
   return <div>Example app!</div>;
 }
 ```
 
-## **API**
+### Color gradient
 
-`useFavicon` takes an options object as follows:
+```tsx
+import useFavicon from 'use-favicon';
 
-```jsx
-type UseFaviconOptions = {
-  faviconType?: FaviconTypes,
-  emoji?: string | IconVariants,
-  icon?: string | IconVariants,
-  colors?: string[],
-};
+export default function App() {
+  useFavicon({
+    type: 'gradient',
+    value: ['#ff00ff', '#0000ff'], // purple to blue
+    direction: '45deg',
+  });
 
-type FaviconTypes = 'icon' | 'emoji' | 'colors' | 'gradient';
-
-type IconVariants = {
-  default: string,
-  dark?: string,
-  away?: string,
-};
+  return <div>Example app!</div>;
+}
 ```
 
-It will return the following functions:
+### Away and dark variant
 
-```jsx
-type FaviconFns = {
-  triggerNotification: () => void,
-  clearNotification: () => void,
-  selectFaviconType: (type: string) => void,
-};
+```tsx
+import useFavicon from 'use-favicon';
+
+export default function App() {
+  useFavicon({
+    // default favicon
+    type: 'emoji',
+    value: '🌞',
+    // favicon to use when user has dark mode
+    darkVariant: {
+      type: 'emoji',
+      value: '🌝',
+    },
+    // favicon to use when tab is unfocused
+    awayVariant: {
+      type: 'emoji',
+      value: '👽',
+    },
+  });
+
+  return <div>Example app!</div>;
+}
 ```
 
-## Requirements
+### Favicon notifications
 
-- React >v16.8 (must support hooks)
-- Must be used within a functional component
-- Currently cannot be used on server rendered React applications
-- SVG icons (required for the emoji and color favicon variants) are now supported in most modern browsers (check out the [caniuse page](https://caniuse.com/?search=svg%20favicon))
+```tsx
+import useFavicon from 'use-favicon';
+
+export default function App() {
+  const { setFaviconNotification } = useFavicon({
+    type: 'emoji',
+    value: '🧠',
+    notification: {
+      position: 'bottom right',
+      color: '#fb464c',
+    },
+  });
+
+  return (
+    <div>
+      <button onClick={() => setFaviconNotification(true)}>
+        Notification on
+      </button>
+      <button onClick={() => setFaviconNotification(false)}>
+        Notification off
+      </button>
+    </div>
+  );
+}
+```
