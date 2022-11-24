@@ -20,5 +20,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npm test:ci
+      - name: Install and cache dependencies
+        uses: bahmutov/npm-install@v1
+      - name: Run tests
+        run: yarn test:ci
