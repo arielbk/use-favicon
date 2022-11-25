@@ -1,6 +1,6 @@
-import React from 'react';
 import { render } from '@testing-library/react';
-import useFavicon from '../src';
+import React from 'react';
+import useFavicon, { withFavicon } from '../src';
 import { FaviconOptions } from '../src/types';
 
 const FaviconComponent: React.FC<{ options?: FaviconOptions }> = ({
@@ -120,7 +120,7 @@ describe('dark variant', () => {
     value: '😎',
     darkVariant: {
       type: 'emoji',
-      value: '✨',
+      value: '⭐️',
     },
   };
 
@@ -148,5 +148,22 @@ describe('dark variant', () => {
     const favicon = getFavicon();
     const href = favicon?.getAttribute('href');
     expect(href).toContain(options!.darkVariant!.value);
+  });
+});
+
+describe('withFavicon HOC', () => {
+  const HollowComponent: React.FC = () => {
+    return <div>Hollow</div>;
+  };
+  const options: FaviconOptions = {
+    type: 'emoji',
+    value: '🥬',
+  };
+  const ComponentWithFavicon = withFavicon(HollowComponent, options);
+  it('changes the favicon with HOC', () => {
+    render(<ComponentWithFavicon />);
+    const favicon = getFavicon();
+    const href = favicon?.getAttribute('href');
+    expect(href).toContain(options.value);
   });
 });

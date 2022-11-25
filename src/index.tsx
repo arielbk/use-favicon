@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useEffect, useState } from 'react';
 import useIsAway from './hooks/useIsAway';
 import useIsDarkMode from './hooks/useIsDarkMode';
@@ -56,6 +57,17 @@ function useFavicon(
         setIsNotification((prev) => !prev);
       }
     },
+  };
+}
+
+export function withFavicon<T extends JSX.IntrinsicAttributes>(
+  Component: React.FC<T>,
+  options: FaviconOptions,
+) {
+  return function ComponentWithFavicon(props: T) {
+    useFavicon(options);
+
+    return <Component {...props} />;
   };
 }
 

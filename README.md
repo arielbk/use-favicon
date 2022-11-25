@@ -112,3 +112,18 @@ export default function App() {
   );
 }
 ```
+
+### withFavicon HOC
+
+`use-favicon` also has a Higher Order Component (HOC) export. This can be useful if you only want `useFavicon` to run under certain conditions.
+
+```tsx
+import { withFavicon } from 'use-favicon';
+
+function App() {
+  return <div>Your app here</div>;
+}
+
+const isDev = process.env.NODE_ENV === 'development';
+export default isDev ? withFavicon(App, { type: 'emoji', value: '🧪' }) : App;
+```
