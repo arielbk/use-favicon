@@ -24,7 +24,7 @@ function constructFaviconSvg(
   isNotification: boolean,
   notificationOptions: FaviconNotificationOptions = {
     position: 'bottom right',
-    color: '#ff0000',
+    color: '#fb464c',
   },
 ): string {
   // initialise svg string with notification color

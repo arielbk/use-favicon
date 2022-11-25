@@ -26,6 +26,25 @@ useFavicon();
 // 👆 without a config object this will set your favicon to a random emoji
 ```
 
+## API
+
+`useFavicon` takes an options object with the following fields:
+
+| Field        | Type                                                                      | Default      | Description                                         |
+| ------------ | ------------------------------------------------------------------------- | ------------ | --------------------------------------------------- |
+| type         | `'icon'` \| `'emoji'` \| `'colors'` \| `'gradient'`                       | emoji        | What kind of favicon to use                         |
+| value        | `string` (icon and emoji)<br>`string` \| `string[]` (colors and gradient) | random emoji | Value of the selected favicon                       |
+| awayVariant  | `FaviconOptions` (this table)                                             | `undefined`  | Favicon to use when tab is unfocused                |
+| darkVariant  | `FaviconOptions` (in this table)                                          | `undefined`  | Favicon to use when user client is set to dark mode |
+| notification | `NotificationOptions` (see below)                                         | _See below_  | Options to use if favicon notification triggered    |
+
+If notification options are provided, it should look like the following:
+
+| Field    | Type                            | Default          | Description                                   |
+| -------- | ------------------------------- | ---------------- | --------------------------------------------- |
+| position | `'top left'`...`'bottom right'` | `'bottom right'` | Where the notification badge should be placed |
+| color    | `string`                        | `'#fb464c'`      | Color of the notification badge               |
+
 ## Examples
 
 ### Emoji
@@ -115,7 +134,7 @@ export default function App() {
 
 ### withFavicon HOC
 
-`use-favicon` also has a Higher Order Component (HOC) export. This can be useful if you only want `useFavicon` to run under certain conditions.
+`use-favicon` also has a Higher Order Component (HOC) export. This can be useful if you only want it to run under certain conditions.
 
 ```tsx
 import { withFavicon } from 'use-favicon';
