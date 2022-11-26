@@ -1,5 +1,7 @@
-export type FaviconFns = {
+export type FaviconApi = {
   setFaviconNotification: (isNotification?: boolean) => void;
+  faviconSvg?: string;
+  setOptions: (newOptions: FaviconOptions) => void;
 };
 
 export type FaviconType = 'icon' | 'emoji' | 'colors' | 'gradient';
