@@ -15,7 +15,7 @@
     "framer-motion": "^7.6.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "use-favicon": "link:../"
+    "use-favicon": "latest"
   },
   "devDependencies": {
     "@types/react": "^18.0.24",
