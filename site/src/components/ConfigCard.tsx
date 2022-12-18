@@ -1,6 +1,6 @@
 import { chakra, Code, Heading } from '@chakra-ui/react';
 import React from 'react';
-import { FaviconOptions } from '../../../dist/types';
+import { FaviconOptions } from 'use-favicon/dist/types';
 
 interface ConfigCardProps {
   name: string;

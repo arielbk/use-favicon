@@ -1,4 +1,4 @@
-import { FaviconOptions } from '../../dist/types';
+import { FaviconOptions } from 'use-favicon/dist/types';
 
 export type Config = {
   id: string;
