@@ -1,19 +1,12 @@
-import {
-  RadioGroup,
-  Stack,
-  Radio,
-  Button,
-  Heading,
-  Container,
-} from '@chakra-ui/react';
+import { Box, Flex, Heading } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import useFavicon from 'use-favicon';
 import { FaviconOptions } from 'use-favicon/dist/types';
 import ConfigCard from './components/ConfigCard';
-import FaviconViewer from './components/FaviconViewer';
+import Output from './components/Output';
 import configs, { Config } from './configs';
 
-type Variant = 'default' | 'dark' | 'away';
+export type Variant = 'default' | 'dark' | 'away';
 
 const defaultOptions: FaviconOptions = {
   type: 'emoji',
@@ -52,40 +45,31 @@ function App() {
   }, [selectedConfig.options, selectedVariant]);
 
   return (
-    <Container mx="auto" my={8} display="flex" flexDirection="column" gap={8}>
-      <Heading as="h1" size="3xl">
-        useFavicon
+    <Box mx="auto" px={8} width="100%">
+      <Heading as="h1" size="3xl" my={8}>
+        use favicon
       </Heading>
-      <FaviconViewer faviconSvg={faviconSvg ?? null} />
-      <RadioGroup
-        onChange={(newVal: Variant) => setSelectedVariant(newVal)}
-        value={selectedVariant}
-      >
-        <Stack direction="row">
-          <Radio value="default">Default</Radio>
-          <Radio value="dark" isDisabled={!selectedConfig.options.darkVariant}>
-            Dark
-          </Radio>
-          <Radio value="away" isDisabled={!selectedConfig.options.awayVariant}>
-            Away
-          </Radio>
-        </Stack>
-      </RadioGroup>
-      <Button onClick={() => setFaviconNotification()}>
-        Toggle notification
-      </Button>
-      <Heading as="h2" size="xl">
-        Examples
-      </Heading>
-      {configs.map((config) => (
-        <ConfigCard
-          {...config}
-          key={config.id}
-          isSelected={config.id === selectedConfig.id}
-          selectConfig={() => setSelectedConfig(config)}
+      <Flex gap={8} flexGrow={0}>
+        <Output
+          selectedVariant={selectedVariant}
+          setSelectedVariant={setSelectedVariant}
+          faviconSvg={faviconSvg}
+          hasDark={!!selectedConfig.options.darkVariant}
+          hasAway={!!selectedConfig.options.awayVariant}
+          setFaviconNotification={setFaviconNotification}
         />
-      ))}
-    </Container>
+        <div>
+          {configs.map((config) => (
+            <ConfigCard
+              {...config}
+              key={config.id}
+              isSelected={config.id === selectedConfig.id}
+              selectConfig={() => setSelectedConfig(config)}
+            />
+          ))}
+        </div>
+      </Flex>
+    </Box>
   );
 }
 

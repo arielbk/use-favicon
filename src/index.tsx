@@ -42,7 +42,7 @@ function useFavicon(
       type,
       value,
       isNotification,
-      props.notification,
+      options.notification,
     );
     setFaviconSvg(svg);
   }, [type, value, isNotification]);

@@ -50,7 +50,7 @@ const configs: Config[] = [
       value: '🧠',
       notification: {
         position: 'top left',
-        color: '#636Cff',
+        color: '#636cff',
       },
     },
   },

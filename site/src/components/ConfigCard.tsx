@@ -20,11 +20,16 @@ const ConfigCard: React.FC<ConfigCardProps> = ({
       onClick={selectConfig}
       p={4}
       border={`1px solid ${isSelected ? '#636Cff' : '#ccc'}`}
+      width={'400px'}
+      textAlign="left"
+      mb={4}
     >
-      <Heading as="h3" size="md">
+      <Heading as="h3" size="md" mb={4}>
         {name}
       </Heading>
-      <Code>{JSON.stringify(options, null, 2)}</Code>
+      <Code width="full" p={4} whiteSpace="pre-wrap">
+        {JSON.stringify(options, null, 2)}
+      </Code>
     </chakra.button>
   );
 };
