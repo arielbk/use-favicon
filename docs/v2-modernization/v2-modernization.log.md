@@ -12,3 +12,10 @@
 - `dist/` is gitignored. `pnpm publish --dry-run` produces a valid tarball (rejected only because v1.0.1 already exists on the registry — version bump happens in a later slice).
 - Vitest globals are enabled (`vitest.config.ts`) so `describe/it/expect` work without imports, matching prior Jest ergonomics.
 - pnpm reports `Ignored build scripts: esbuild` — harmless for now; if a CI signing requirement appears later, run `pnpm approve-builds`.
+
+## `infer-kind` — 2026-05-21 19:09:19
+
+**Status:** done
+**Summary:** Added a new `inferKind` export with v2 value-kind inference for emoji, CSS colors, color arrays, icon paths/URLs, and raw SVG objects. Replaced the placeholder Vitest file with a table-driven spec that locks the intended inference matrix and edge cases.
+**Deviations:** none
+**Handoff:** `inferKind` now classifies single-color arrays as `color` and multi-color arrays as `gradient`, which `build-favicon-svg` can consume directly in the next slice. The current root export still includes the legacy v1 hook/HOC surface; downstream slices can keep layering the v2 API in public exports until `use-favicon-minimal` replaces that entrypoint fully.

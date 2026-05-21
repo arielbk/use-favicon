@@ -30,7 +30,7 @@ Vertical slices that take `use-favicon` from v1.0.1 to a shippable v2.0.0: decla
 
 ### `infer-kind` — Value-to-kind inference
 
-**Status:** not-started
+**Status:** done
 
 **Outside-in:** `inferKind('🦊') === 'emoji'`, `inferKind('#f00') === 'color'`, `inferKind(['#f00','#0f0']) === 'gradient'`, `inferKind('/icon.png') === 'icon'`, `inferKind({ svg: '<text/>' }) === 'svg'`.
 

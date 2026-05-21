@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import useIsAway from './hooks/useIsAway';
 import useIsDarkMode from './hooks/useIsDarkMode';
+export { inferKind, type FaviconValueKind } from './inferKind';
 import { FaviconApi, FaviconOptions, FaviconType } from './types';
 import constructFaviconSvg from './utils/constructFaviconSvg';
 import getFaviconLink from './utils/getFaviconLink';
