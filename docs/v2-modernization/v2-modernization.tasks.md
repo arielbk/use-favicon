@@ -78,7 +78,7 @@ Vertical slices that take `use-favicon` from v1.0.1 to a shippable v2.0.0: decla
 
 ### `composable-detection-hooks` — `useIsAway` and `useIsDark`
 
-**Status:** not-started
+**Status:** done
 
 **Outside-in:** `import { useIsAway, useIsDark } from 'use-favicon'` — each returns a `boolean`, subscribes to the right browser event / media query, and returns `false` during SSR with no hydration mismatch.
 

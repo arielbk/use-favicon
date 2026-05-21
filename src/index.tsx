@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { buildFaviconSvg } from './buildFaviconSvg';
 import { inferKind, type FaviconValueKind } from './inferKind';
 import { setFaviconHref } from './setFaviconHref';
+import { useIsAway } from './useIsAway';
+import { useIsDark } from './useIsDark';
 
 type RawSvgValue = { svg: string };
 export type FaviconValue = string | string[] | RawSvgValue;
@@ -23,7 +25,7 @@ export function useFavicon(value: FaviconValue): void {
   }, [value]);
 }
 
-export { buildFaviconSvg, inferKind, setFaviconHref };
+export { buildFaviconSvg, inferKind, setFaviconHref, useIsAway, useIsDark };
 export type { FaviconValueKind };
 
 export default useFavicon;

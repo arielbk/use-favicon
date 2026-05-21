@@ -33,3 +33,10 @@
 **Summary:** Replaced the legacy stateful v1 hook entrypoint with the v2 minimal declarative hook: `useFavicon(value)` now infers the value kind, writes either a direct icon URL or an SVG data URI to `<link rel="icon">`, and returns `void`. Added hook tests for initial render, rerender updates, raw SVG passthrough, direct icon URLs, unmount safety, and SSR no-`document` access.
 **Deviations:** The slice feedback loop was run at library scope (`test:lib`, `typecheck:lib`, `build:lib`) rather than the root scripts because the demo site still targets the removed v1 API and is scheduled for rewrite in `docs-and-migration`.
 **Handoff:** `src/index.tsx` is now the v2 public surface for the hook plus `inferKind`/`buildFaviconSvg`; downstream slices should extend this file rather than revive `withFavicon` or the old option bag. Legacy files such as `src/types.ts`, `src/utils/constructFaviconSvg.ts`, and the site app still exist on disk but are no longer part of the library API contract.
+
+## `composable-detection-hooks` — 2026-05-21 19:19:15
+
+**Status:** done
+**Summary:** Added `useIsAway` and `useIsDark` to the public v2 exports, both implemented with `useSyncExternalStore` so they subscribe to `visibilitychange` and `matchMedia('(prefers-color-scheme: dark)')` while returning `false` on the server. Added RTL and SSR coverage for initial state, change subscriptions, direct server snapshots, and server rendering safety.
+**Deviations:** The feedback loop was run at library scope (`test:lib`, `typecheck:lib`, `build:lib`) because the demo site still targets the removed v1 API and is owned by `docs-and-migration`.
+**Handoff:** `useIsAway` and `useIsDark` live in new top-level modules (`src/useIsAway.ts`, `src/useIsDark.ts`) and are re-exported from `src/index.tsx`, which keeps them on the main package entrypoint for the README and downstream badge-composition docs. Legacy hook files under `src/hooks/` still exist on disk but are not part of the v2 public surface; downstream slices should keep using the new top-level exports.
