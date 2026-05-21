@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "A React hook to add dynamic favicons to your application",
   "main": "dist/index.js",
+  "packageManager": "pnpm@10.28.0",
   "author": "arielbk",
   "keywords": [
     "react",
@@ -12,30 +13,33 @@
   "homepage": "https://github.com/arielbk/use-favicon",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:ci": "jest --ci",
-    "build": "tsup src",
-    "dev": "tsup src --watch",
-    "release": "release-it"
+    "build": "pnpm run build:lib && pnpm --dir site run build",
+    "build:lib": "tsup",
+    "dev": "tsup --watch",
+    "release": "release-it",
+    "test": "pnpm run test:lib && pnpm --dir site run test",
+    "test:lib": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "pnpm run typecheck:lib && pnpm --dir site run typecheck",
+    "typecheck:lib": "tsc --noEmit"
   },
   "devDependencies": {
-    "@testing-library/react": "^13.4.0",
-    "@types/jest": "^29.2.3",
-    "@types/react": "^18.0.25",
-    "@types/react-dom": "^18.0.9",
-    "jest": "^29.3.1",
-    "jest-environment-jsdom": "^29.3.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitest/coverage-v8": "^4.0.8",
+    "jsdom": "^26.1.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "release-it": "^15.5.0",
-    "ts-jest": "^29.0.3",
-    "tsup": "^6.5.0",
-    "typescript": "^4.9.3"
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.8"
   },
   "peerDependencies": {
-    "react": ">=17",
-    "react-dom": ">=17"
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "files": [
     "dist"
@@ -43,6 +47,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
     }

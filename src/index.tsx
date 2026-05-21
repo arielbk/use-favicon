@@ -63,7 +63,7 @@ function useFavicon(
       if (newIsNotification !== undefined) {
         setIsNotification(newIsNotification);
       } else {
-        setIsNotification((prev) => !prev);
+        setIsNotification((prev: boolean) => !prev);
       }
     },
     faviconSvg,
@@ -71,8 +71,8 @@ function useFavicon(
   };
 }
 
-export function withFavicon<T extends JSX.IntrinsicAttributes>(
-  Component: React.FC<T>,
+export function withFavicon<T extends object>(
+  Component: React.ComponentType<T>,
   options: FaviconOptions,
 ) {
   return function ComponentWithFavicon(props: T) {
@@ -81,5 +81,12 @@ export function withFavicon<T extends JSX.IntrinsicAttributes>(
     return <Component {...props} />;
   };
 }
+
+export type {
+  FaviconApi,
+  FaviconNotificationOptions,
+  FaviconOptions,
+  FaviconType,
+} from './types';
 
 export default useFavicon;

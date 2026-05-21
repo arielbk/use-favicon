@@ -1,7 +1,7 @@
 import { Box, Flex, Heading } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import useFavicon from 'use-favicon';
-import { FaviconOptions } from 'use-favicon/dist/types';
+import type { FaviconOptions } from 'use-favicon';
 import ConfigCard from './components/ConfigCard';
 import Output from './components/Output';
 import configs, { Config } from './configs';
