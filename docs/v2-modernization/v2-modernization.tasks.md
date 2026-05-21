@@ -132,7 +132,7 @@ Document outcomes in a smoke-test log in `docs/v2-modernization/`.
 
 ### `docs-and-migration` — Docs, migration guide, demo site
 
-**Status:** not-started
+**Status:** needs-review
 
 **Outside-in:** A reader landing on the repo's README understands the v2 API in under a minute; a v1 user opening `MIGRATION.md` can find their old usage pattern and the v2 equivalent for every removed/changed feature; the `site/` demo deployed against the v2 API works end-to-end.
 
