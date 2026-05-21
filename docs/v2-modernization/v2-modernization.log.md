@@ -40,3 +40,10 @@
 **Summary:** Added `useIsAway` and `useIsDark` to the public v2 exports, both implemented with `useSyncExternalStore` so they subscribe to `visibilitychange` and `matchMedia('(prefers-color-scheme: dark)')` while returning `false` on the server. Added RTL and SSR coverage for initial state, change subscriptions, direct server snapshots, and server rendering safety.
 **Deviations:** The feedback loop was run at library scope (`test:lib`, `typecheck:lib`, `build:lib`) because the demo site still targets the removed v1 API and is owned by `docs-and-migration`.
 **Handoff:** `useIsAway` and `useIsDark` live in new top-level modules (`src/useIsAway.ts`, `src/useIsDark.ts`) and are re-exported from `src/index.tsx`, which keeps them on the main package entrypoint for the README and downstream badge-composition docs. Legacy hook files under `src/hooks/` still exist on disk but are not part of the v2 public surface; downstream slices should keep using the new top-level exports.
+
+## `badge-support` — 2026-05-21 19:22:47
+
+**Status:** done
+**Summary:** Added v2 badge rendering to the favicon pipeline and hook API: `useFavicon(value, { badge })` now supports a default red dot, numeric/string content, custom color, and custom corner positioning while leaving `badge: false` and `badge: 0` unset. Extended the SVG snapshot suite and hook rerender coverage to lock the badge contract.
+**Deviations:** The badge overlay currently uses simple SVG primitives and a built-in `Arial, sans-serif` text stack for numeric/string badges; no extra font-loading or icon-kind badge path was added in this slice.
+**Handoff:** Badge types live in `src/buildFaviconSvg.ts` and flow through the public `UseFaviconOptions` export from `src/index.tsx`. `buildFaviconSvg` still passes raw `{ svg }` values through unchanged, so downstream docs and framework smoke tests should treat the badge API as applying to generated emoji/color/gradient favicons rather than rewriting caller-supplied SVG markup.

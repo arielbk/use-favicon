@@ -97,7 +97,7 @@ Vertical slices that take `use-favicon` from v1.0.1 to a shippable v2.0.0: decla
 
 ### `badge-support` — Badge option
 
-**Status:** not-started
+**Status:** done
 
 **Outside-in:** `useFavicon('🦊', { badge: true })` shows a red dot; `useFavicon('🦊', { badge: 3 })` shows "3"; `useFavicon('🦊', { badge: '!' })` shows "!"; `useFavicon('🦊', { badge: { content: 5, color: '#00f', position: 'top left' } })` shows a customized badge; `badge: 0` or `badge: false` shows no badge.
 

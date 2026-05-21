@@ -33,6 +33,25 @@ describe('useFavicon', () => {
     );
   });
 
+  it('updates the favicon when the badge changes', () => {
+    const { rerender } = renderHook(
+      ({ badge }) => useFavicon('🦊', badge === undefined ? undefined : { badge }),
+      {
+        initialProps: { badge: false as false | number },
+      },
+    );
+
+    const favicon = document.querySelector("link[rel='icon']");
+    const initialHref = favicon?.getAttribute('href');
+
+    rerender({ badge: 3 });
+
+    expect(favicon?.getAttribute('href')).toBe(
+      `data:image/svg+xml,${encodeURIComponent(buildFaviconSvg('emoji', '🦊', { badge: 3 }))}`,
+    );
+    expect(favicon?.getAttribute('href')).not.toBe(initialHref);
+  });
+
   it('supports raw svg values', () => {
     const rawSvg = { svg: '<svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" /></svg>' };
 
