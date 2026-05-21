@@ -26,3 +26,10 @@
 **Summary:** Added a new public `buildFaviconSvg` export for the v2 pipeline and locked its no-badge contract with inline-snapshot tests for `emoji`, `color`, `gradient`, and raw `svg` values. The builder intentionally excludes `icon`, which remains a direct href path for the upcoming hook slice.
 **Deviations:** none
 **Handoff:** The new builder lives in `src/buildFaviconSvg.ts` and is exported from `src/index.tsx` without disturbing the legacy v1 utility in `src/utils/constructFaviconSvg.ts`. `use-favicon-minimal` should call `inferKind` first, send `icon` values straight to `<link href>`, and route every other kind through `buildFaviconSvg`.
+
+## `use-favicon-minimal` — 2026-05-21 19:15:09
+
+**Status:** done
+**Summary:** Replaced the legacy stateful v1 hook entrypoint with the v2 minimal declarative hook: `useFavicon(value)` now infers the value kind, writes either a direct icon URL or an SVG data URI to `<link rel="icon">`, and returns `void`. Added hook tests for initial render, rerender updates, raw SVG passthrough, direct icon URLs, unmount safety, and SSR no-`document` access.
+**Deviations:** The slice feedback loop was run at library scope (`test:lib`, `typecheck:lib`, `build:lib`) rather than the root scripts because the demo site still targets the removed v1 API and is scheduled for rewrite in `docs-and-migration`.
+**Handoff:** `src/index.tsx` is now the v2 public surface for the hook plus `inferKind`/`buildFaviconSvg`; downstream slices should extend this file rather than revive `withFavicon` or the old option bag. Legacy files such as `src/types.ts`, `src/utils/constructFaviconSvg.ts`, and the site app still exist on disk but are no longer part of the library API contract.

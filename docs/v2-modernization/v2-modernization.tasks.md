@@ -58,7 +58,7 @@ Vertical slices that take `use-favicon` from v1.0.1 to a shippable v2.0.0: decla
 
 ### `use-favicon-minimal` — Declarative hook (no badge yet)
 
-**Status:** not-started
+**Status:** done
 
 **Outside-in:** `useFavicon('🦊')` mounts and the `<link rel="icon">` href reflects the rendered favicon; re-rendering with `useFavicon('🐻')` updates it; unmounting does not throw. `useFavicon` returns `void`.
 
