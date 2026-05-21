@@ -111,7 +111,7 @@ Vertical slices that take `use-favicon` from v1.0.1 to a shippable v2.0.0: decla
 
 ### `framework-smoke-tests` — Cross-framework verification
 
-**Status:** not-started
+**Status:** needs-review
 
 **Outside-in:** Three fresh apps — Next.js App Router, Remix / React Router v7, Vite + React SPA — each install `use-favicon@2` from a local tarball (`pnpm pack`), use the hook in their root, and render correctly.
 

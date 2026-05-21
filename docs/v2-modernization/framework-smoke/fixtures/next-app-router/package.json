@@ -1,0 +1,20 @@
+{
+  "name": "use-favicon-smoke-next-app-router",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build"
+  },
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "use-favicon": "file:__USE_FAVICON_TARBALL__"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "typescript": "^5.9.3"
+  }
+}
