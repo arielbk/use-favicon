@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+export { buildFaviconSvg } from './buildFaviconSvg';
 import useIsAway from './hooks/useIsAway';
 import useIsDarkMode from './hooks/useIsDarkMode';
 export { inferKind, type FaviconValueKind } from './inferKind';

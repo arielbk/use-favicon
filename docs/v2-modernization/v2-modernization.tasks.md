@@ -44,7 +44,7 @@ Vertical slices that take `use-favicon` from v1.0.1 to a shippable v2.0.0: decla
 
 ### `build-favicon-svg` — SVG construction
 
-**Status:** not-started
+**Status:** done
 
 **Outside-in:** `buildFaviconSvg('emoji', '🦊')` returns a valid SVG string; same for `color`, `gradient`, and `svg` (pass-through). `icon` kind is *not* handled here — the caller sets `<link href>` directly to the URL.
 
