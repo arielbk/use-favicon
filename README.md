@@ -1,148 +1,136 @@
-# **use-favicon**
+# use-favicon
 
-A React hook to update the favicon of your app. Useful to quickly add a favicon to a side project, or to dynamically change the favicon based on the state of your application.
+Declarative favicons for React. Pass a value, rerender to change it, and compose browser signals like dark-mode and away-state with your own logic.
 
-This library makes use of SVG icons, which are now supported in most modern browsers (check out the [caniuse page](https://caniuse.com/?search=svg%20favicon)).
+```tsx
+import { useFavicon } from 'use-favicon';
 
-## Features
+export function App() {
+  useFavicon('🦊');
 
-- Favicon can be either a regular image icon, an emoji, a color palette, or a gradient
-- Dynamic favicon based on tab focus
-- Dynamic favicon based on light or dark mode
-- A notification badge can be triggered on the icon
+  return <main>Hello</main>;
+}
+```
 
-## Getting started
+## Install
 
-```jsx
+```bash
+pnpm add use-favicon
+# or
 npm install use-favicon
+# or
+yarn add use-favicon
 ```
 
+Peer dependency: React 18 or 19.
+
+## How it works
+
+`useFavicon(value, options?)` renders a favicon and returns `void`. To change it, rerender the component with a new value — same as any other React hook.
+
 ```tsx
-import useFavicon from 'use-favicon';
-
-// in your functional React component
-useFavicon();
-
-// 👆 without a config object this will set your favicon to a random emoji
+const [emoji, setEmoji] = useState('🙂');
+useFavicon(emoji);
 ```
 
-## API
+## Supported values
 
-`useFavicon` takes an options object with the following fields:
+The value type is inferred automatically:
 
-| Field        | Type                                                                      | Default      | Description                                         |
-| ------------ | ------------------------------------------------------------------------- | ------------ | --------------------------------------------------- |
-| type         | `'icon'` \| `'emoji'` \| `'colors'` \| `'gradient'`                       | emoji        | What kind of favicon to use                         |
-| value        | `string` (icon and emoji)<br>`string` \| `string[]` (colors and gradient) | random emoji | Value of the selected favicon                       |
-| awayVariant  | `FaviconOptions` (this table)                                             | `undefined`  | Favicon to use when tab is unfocused                |
-| darkVariant  | `FaviconOptions` (in this table)                                          | `undefined`  | Favicon to use when user client is set to dark mode |
-| notification | `NotificationOptions` (see below)                                         | _See below_  | Options to use if favicon notification triggered    |
+| Value | Result |
+| --- | --- |
+| `'🦊'`, `'🚀'`, … | Emoji rendered inside an SVG |
+| `'#f97316'`, `'rebeccapurple'` | Solid CSS color tile |
+| `['#f97316', '#fb7185', '#38bdf8']` | Diagonal gradient |
+| `'/icon.png'`, `'https://…/icon.svg'` | Used directly as the favicon `href` |
+| `{ svg: '<svg…>' }` | Raw SVG escape hatch |
 
-If notification options are provided, it should look like the following:
+## Badges
 
-| Field    | Type                            | Default          | Description                                   |
-| -------- | ------------------------------- | ---------------- | --------------------------------------------- |
-| position | `'top left'`...`'bottom right'` | `'bottom right'` | Where the notification badge should be placed |
-| color    | `string`                        | `'#fb464c'`      | Color of the notification badge               |
-
-## Examples
-
-### Emoji
+Pass `badge` in the second argument to overlay a notification badge on emoji, color, or gradient favicons.
 
 ```tsx
-import useFavicon from 'use-favicon';
+useFavicon('📥', { badge: unreadCount });
+```
 
-export default function App() {
-  useFavicon({
-    type: 'emoji',
-    value: '👾',
-  });
+| `badge` value | Result |
+| --- | --- |
+| `true` | Red dot |
+| `number` or non-empty `string` | Text content (count or letter) |
+| `{ content, color?, position? }` | Customized badge |
+| `false`, `0`, or `''` | No badge |
 
-  return <div>Example app!</div>;
+`position` accepts `'top right'` (default), `'top left'`, `'bottom right'`, or `'bottom left'`.
+
+## Dark mode and away state
+
+`useIsDark` and `useIsAway` are standalone hooks. Combine them with your own state — no nested variant objects.
+
+```tsx
+import { useFavicon, useIsAway, useIsDark } from 'use-favicon';
+
+export function PresenceFavicon() {
+  const isDark = useIsDark();
+  const isAway = useIsAway();
+
+  useFavicon(isAway ? '😴' : isDark ? '🌚' : '🌞');
 }
 ```
 
-### Color gradient
+Both hooks are SSR-safe and return `false` on the server.
+
+## Raw SVG
+
+When you need full control, pass `{ svg }`:
 
 ```tsx
-import useFavicon from 'use-favicon';
-
-export default function App() {
-  useFavicon({
-    type: 'gradient',
-    value: ['#ff00ff', '#0000ff'], // purple to blue
-    direction: '45deg',
-  });
-
-  return <div>Example app!</div>;
-}
+useFavicon({
+  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="18" fill="#111827" /><path d="M28 72L50 24L72 72H61L50 47L39 72Z" fill="#f8fafc" /></svg>',
+});
 ```
 
-### Away and dark variant
+## TypeScript
 
-```tsx
-import useFavicon from 'use-favicon';
+```ts
+type FaviconValue = string | string[] | { svg: string };
 
-export default function App() {
-  useFavicon({
-    // default favicon
-    type: 'emoji',
-    value: '🌞',
-    // favicon to use when user has dark mode
-    darkVariant: {
-      type: 'emoji',
-      value: '🌝',
-    },
-    // favicon to use when tab is unfocused
-    awayVariant: {
-      type: 'emoji',
-      value: '👽',
-    },
-  });
+type UseFaviconOptions = {
+  badge?:
+    | boolean
+    | string
+    | number
+    | {
+        content: string | number;
+        color?: string;
+        position?: 'top right' | 'top left' | 'bottom right' | 'bottom left';
+      };
+};
 
-  return <div>Example app!</div>;
-}
+declare function useFavicon(value: FaviconValue, options?: UseFaviconOptions): void;
 ```
 
-### Favicon notifications
+## Named exports
 
-```tsx
-import useFavicon from 'use-favicon';
+- `useFavicon` — set the favicon from a React component.
+- `useIsDark` — `true` when the OS/browser prefers dark mode.
+- `useIsAway` — `true` when the tab is hidden.
+- `buildFaviconSvg` — pure function that returns the SVG string.
+- `inferKind` — detect what kind of value something is.
+- `setFaviconHref` — imperatively swap the favicon href.
 
-export default function App() {
-  const { setFaviconNotification } = useFavicon({
-    type: 'emoji',
-    value: '🧠',
-    notification: {
-      position: 'bottom right',
-      color: '#fb464c',
-    },
-  });
+## Try it
 
-  return (
-    <div>
-      <button onClick={() => setFaviconNotification(true)}>
-        Notification on
-      </button>
-      <button onClick={() => setFaviconNotification(false)}>
-        Notification off
-      </button>
-    </div>
-  );
-}
+The [`site/`](./site) workspace is a live playground for every feature. Run it with:
+
+```bash
+pnpm install
+pnpm --filter use-favicon-site dev
 ```
 
-### withFavicon HOC
+## Migrating from v1
 
-`use-favicon` also has a Higher Order Component (HOC) export. This can be useful if you only want it to run under certain conditions.
+If you used a previous version of this package, see [MIGRATION.md](./MIGRATION.md) for an old-to-new mapping of every changed feature.
 
-```tsx
-import { withFavicon } from 'use-favicon';
+## License
 
-function App() {
-  return <div>Your app here</div>;
-}
-
-const isDev = process.env.NODE_ENV === 'development';
-export default isDev ? withFavicon(App, { type: 'emoji', value: '🧪' }) : App;
-```
+MIT
