@@ -11,6 +11,13 @@
     "hook"
   ],
   "homepage": "https://github.com/arielbk/use-favicon",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arielbk/use-favicon.git"
+  },
+  "bugs": {
+    "url": "https://github.com/arielbk/use-favicon/issues"
+  },
   "license": "MIT",
   "scripts": {
     "build": "pnpm run build:lib && pnpm --dir site run build",
